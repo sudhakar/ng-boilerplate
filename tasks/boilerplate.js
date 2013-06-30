@@ -19,10 +19,12 @@ module.exports = function ( grunt ) {
   grunt.loadNpmTasks('grunt-ngmin');
   grunt.loadNpmTasks('grunt-html2js');
 
+  grunt.file.setBase(__dirname + '/..');
+
   /**
    * Load in our build configuration file.
    */
-  var userConfig = require( './build.config.js' );
+  var userConfig = grunt.config.get();
 
   /**
    * This is the configuration object Grunt uses to give each plugin its 
@@ -50,6 +52,9 @@ module.exports = function ( grunt ) {
         ' * Licensed <%= pkg.licenses.type %> <<%= pkg.licenses.url %>>\n' +
         ' */\n'
     },
+
+    module_prefix: '(function ( window, angular, undefined ) {',
+    module_suffix: '})( window, window.angular );',
 
     /**
      * Creates a changelog on a new version.
@@ -144,9 +149,28 @@ module.exports = function ( grunt ) {
      * `grunt concat` concatenates multiple source files into a single file.
      */
     concat: {
+
       /**
-       * The `compile_js` target is the concatenation of our application source
-       * code and all specified vendor source code into a single file.
+       * The `compile_appjs` target concatinates our application source
+       * code along with module wrappers.
+       */
+      compile_appjs: {
+        options: {
+          banner: '<%= module_prefix %>',
+          footer: '<%= module_suffix %>'
+        },
+        src: [ 
+          '<%= build_dir %>/src/**/*.js', 
+          '<%= html2js.app.dest %>', 
+          '<%= html2js.common.dest %>', 
+          '<%= vendor_files.js %>', 
+        ],
+        dest: '<%= compile_dir %>/assets/<%= pkg.name %>.js'
+      },
+
+      /**
+       * The `compile_js` target concatinates vendor source code followed by 
+       * app files concatinated by previous target into a single file.
        */
       compile_js: {
         options: {
@@ -154,12 +178,7 @@ module.exports = function ( grunt ) {
         },
         src: [ 
           '<%= vendor_files.js %>', 
-          'module.prefix', 
-          '<%= build_dir %>/src/**/*.js', 
-          '<%= html2js.app.dest %>', 
-          '<%= html2js.common.dest %>', 
-          '<%= vendor_files.js %>', 
-          'module.suffix' 
+          '<%= compile_dir %>/assets/<%= pkg.name %>.js'
         ],
         dest: '<%= compile_dir %>/assets/<%= pkg.name %>.js'
       }
