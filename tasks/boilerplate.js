@@ -161,8 +161,7 @@ module.exports = function ( grunt ) {
         },
         src: [ 
           '<%= build_dir %>/src/**/*.js', 
-          '<%= html2js.app.dest %>', 
-          '<%= html2js.common.dest %>', 
+          '<%= html2js.tpl.dest %>', 
           '<%= vendor_files.js %>', 
         ],
         dest: '<%= compile_dir %>/assets/<%= pkg.name %>.js'
@@ -321,26 +320,16 @@ module.exports = function ( grunt ) {
      */
     html2js: {
       /**
-       * These are the templates from `src/app`.
+       * These are the templates from `src`.
        */
-      app: {
+      tpl: {
         options: {
-          base: 'src/app'
+          base: 'src',
+          module: 'templates'
         },
-        src: [ '<%= app_files.atpl %>' ],
-        dest: '<%= build_dir %>/templates-app.js'
+        src: [ '<%= app_files.tpl %>' ],
+        dest: '<%= build_dir %>/templates.js'
       },
-
-      /**
-       * These are the templates from `src/common`.
-       */
-      common: {
-        options: {
-          base: 'src/common'
-        },
-        src: [ '<%= app_files.ctpl %>' ],
-        dest: '<%= build_dir %>/templates-common.js'
-      }
     },
 
     /**
@@ -376,8 +365,7 @@ module.exports = function ( grunt ) {
         src: [
           '<%= vendor_files.js %>',
           '<%= build_dir %>/src/**/*.js',
-          '<%= html2js.common.dest %>',
-          '<%= html2js.app.dest %>',
+          '<%= html2js.tpl.dest %>',
           '<%= vendor_files.css %>',
           '<%= recess.build.dest %>'
         ]
@@ -407,8 +395,7 @@ module.exports = function ( grunt ) {
         dir: '<%= build_dir %>',
         src: [ 
           '<%= vendor_files.js %>',
-          '<%= html2js.app.dest %>',
-          '<%= html2js.common.dest %>',
+          '<%= html2js.tpl.dest %>',
           'vendor/angular-mocks/angular-mocks.js'
         ]
       }
@@ -493,8 +480,7 @@ module.exports = function ( grunt ) {
        */
       tpls: {
         files: [ 
-          '<%= app_files.atpl %>', 
-          '<%= app_files.ctpl %>'
+          '<%= app_files.tpl %>'
         ],
         tasks: [ 'html2js' ]
       },

@@ -11,7 +11,7 @@ angular.module( 'ngBoilerplate.about', [
     views: {
       "main": {
         controller: 'AboutCtrl',
-        templateUrl: 'about/about.tpl.html'
+        templateUrl: 'app/about/about.tpl.html'
       }
     }
   });

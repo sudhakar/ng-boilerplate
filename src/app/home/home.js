@@ -29,7 +29,7 @@ angular.module( 'ngBoilerplate.home', [
     views: {
       "main": {
         controller: 'HomeCtrl',
-        templateUrl: 'home/home.tpl.html'
+        templateUrl: 'app/home/home.tpl.html'
       }
     }
   });
